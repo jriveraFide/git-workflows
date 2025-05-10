@@ -54,23 +54,20 @@ jobs:
       - name: Instalar dependencias
         run: pip install openai
 
-      - name: Evaluar todos los archivos en la carpeta indicada
+      - name: Evaluar todos los archivos .zip en la carpeta indicada
         run: |
           carpeta="${{ github.event.inputs.carpeta }}"
           prompt="${{ github.event.inputs.prompt }}"
           echo "📂 Evaluando carpeta: $carpeta"
 
           if [ -f "estudiantes/$carpeta/criterios.json" ]; then
-            # Descomprimir todos los archivos .zip en la carpeta
+            # Recorrer todos los archivos .zip en la carpeta
             for archivo_zip in "estudiantes/$carpeta"/*.zip; do
-              echo "📦 Descomprimiendo: $archivo_zip"
-              carpeta_extraida="estudiantes/$carpeta/$(basename "$archivo_zip" .zip)"
-              mkdir -p "$carpeta_extraida"
-              unzip "$archivo_zip" -d "$carpeta_extraida"
-
-              # Leer el código desde la carpeta extraída
+              echo "📦 Procesando archivo: $archivo_zip"
+              
+              # Pasar el archivo .zip al script de Python para procesarlo
               python3 evaluador/scripts/generar_feedback.py \
-                --carpeta "$carpeta_extraida" \
+                --archivo_zip "$archivo_zip" \
                 --criterios "estudiantes/$carpeta/criterios.json" \
                 --prompt_principal "evaluador/scripts/prompts/$prompt" \
                 --salida "reportes/$carpeta/$(basename "$archivo_zip" .zip).md"
@@ -80,27 +77,15 @@ jobs:
             exit 1
           fi
 
-      - name: Crear carpeta para los reportes si no existe
-        run: |
-          carpeta_reportes="reportes/$carpeta"
-          mkdir -p "$carpeta_reportes"
-          echo "✅ Carpeta de reportes creada: $carpeta_reportes"
-
-      - name: Verificar si los archivos .md fueron generados
-        run: |
-          carpeta_reportes="reportes/$carpeta"
-          if ls $carpeta_reportes/*.md 1> /dev/null 2>&1; then
-            echo "✅ Archivos .md generados"
-          else
-            echo "❌ No se generaron archivos .md en la carpeta $carpeta_reportes"
-            exit 1
-          fi
-
       - name: Subir reportes al repositorio de reportes
         run: |
           carpeta="${{ github.event.inputs.carpeta }}"
           carpeta_reportes="reportes/$carpeta"
           
+          # Crear carpeta si no existe
+          mkdir -p "$carpeta_reportes"
+          echo "✅ Carpeta de reportes creada: $carpeta_reportes"
+
           # Copiar los archivos .md a la carpeta del repositorio de reportes
           cp $carpeta_reportes/*.md $carpeta_reportes/
 
