@@ -44,14 +44,6 @@ jobs:
           ref: main
           path: reportes
 
-      - name: Listar el contenido de los directorios
-        run: |
-          echo "Contenido del repositorio evaluador:"
-          ls -la
-          echo "Contenido del repositorio de estudiantes:"
-          ls -la estudiantes/
-          echo "Contenido del repositorio de reportes:"
-          ls -la reportes/
 
       - name: Configurar Python
         uses: actions/setup-python@v4
