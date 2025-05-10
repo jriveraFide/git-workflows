@@ -9,7 +9,7 @@ La estructura de folders dentro de tu repositorio debe de ser la siguiente:
      - nombre_del_estudiante.zip
      - criterios.json
        
-Debes de crear los siguientes secretos en tu repositorio:
+Crear los siguientes secretos en tu repositorio:
 
 OPENAI_API_KEY
 
