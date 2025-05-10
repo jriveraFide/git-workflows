@@ -20,13 +20,16 @@ jobs:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       GITHUB_TOKEN : ${{ secrets.GITHUB_TOKEN }}
       REPO_REPORTES : ${{ secrets.REPO_REPORTES }}
+      
 
     steps:
-      # Checkout del repositorio evaluador (donde está el script generar_feedback.py)
-      - name: Checkout del repositorio evaluador
+      # Clonar el repositorio de los estudiantes en una carpeta llamada estudiantes
+      - name: Clonar el repositorio actual
         uses: actions/checkout@v3
         with:
-          ref: main  # Esto asegura que estemos trabajando con el repositorio actual
+          repository: jriveraFide/git-workflows
+          token: ${{ secrets.GITHUB_TOKEN }}  # Autenticación con el token de GitHub
+          path: evaluador  # Carpeta donde se clonará el repositorio de estudiantes
 
       # Clonar el repositorio de los estudiantes en una carpeta llamada estudiantes
       - name: Clonar el repositorio de los estudiantes
@@ -71,7 +74,7 @@ jobs:
             for archivo in "estudiantes/$carpeta"/*.java; do
               estudiante=$(basename "$archivo" .java)
               echo "🧪 Evaluando: $archivo"
-              python3 scripts/generar_feedback.py \
+              python3 evaluador/scripts/generar_feedback.py \
                 --codigo "$archivo" \
                 --criterios "estudiantes/$carpeta/criterios.json" \
                 --salida "estudiantes/$carpeta/${estudiante}.md"
