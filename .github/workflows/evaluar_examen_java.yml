@@ -67,7 +67,7 @@ jobs:
               python3 evaluador/scripts/generar_feedback.py \
                 --codigo "$archivo" \
                 --criterios "estudiantes/$carpeta/criterios.json" \
-                --promt_principal "./prompts/${{ github.event.inputs.prompt }}.txt"
+                --promt_principal "./prompts/${{ github.event.inputs.prompt }}.txt" \
                 --salida "estudiantes/$carpeta/${estudiante}.md"
             done
           else
