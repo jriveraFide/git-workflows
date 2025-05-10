@@ -28,7 +28,7 @@ def construir_prompt(codigo, criterios):
 
 def evaluar_con_openai(prompt):
     response = client.chat.completions.create(
-        model="gpt-4o",
+        model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": "Eres un evaluador académico de código Java."},
             {"role": "user", "content": prompt}
