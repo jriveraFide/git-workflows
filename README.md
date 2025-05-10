@@ -17,7 +17,7 @@ PAT_REPORTES --> este es tu github token
 
 REPO_EVALUADOR --> este es la direccion en github donde se encuentra este repositorio, formato: org/repo, ex: jriveraFide/git-workflows (PUBLICO)
 
-REPO_REPORTES --> este es la direccion en github donde se encuentra el repositorio donde quieres que la automatizacion cargue tus reportes (PRIVADO)
+REPO_REPORTES --> este es la direccion en github donde se encuentra el repositorio donde quieres que la automatizacion cargue tus reportes formato: org/repo (PRIVADO)
 
 Estructura para el archivo criterios.json:
 
