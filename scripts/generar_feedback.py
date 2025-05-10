@@ -52,6 +52,7 @@ def main():
     parser = argparse.ArgumentParser(description='Generar feedback con IA.')
     parser.add_argument('--codigo', required=True, help='Ruta al archivo de código .java')
     parser.add_argument('--criterios', required=True, help='Ruta al archivo criterios.json')
+    parser.add_argument('--promt_principal', required=True, help='Prompt a utilizar')
     parser.add_argument('--salida', required=True, help='Ruta de salida del reporte Markdown')
 
     args = parser.parse_args()
