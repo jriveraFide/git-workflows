@@ -38,11 +38,13 @@ jobs:
           repository: ${{ github.event.inputs.repo_estudiantes }} 
           token: ${{ secrets.GITHUB_TOKEN }}  
           path: estudiantes  
+          
       - name: Clonar el repositorio de los reportes
         uses: actions/checkout@v3
         with:
           repository: jriveraFide/Reportes
           token: ${{ secrets.GITHUB_TOKEN }}
+          ref: main
           path: reportes
 
       # Confirmación de los archivos y directorios que tenemos
