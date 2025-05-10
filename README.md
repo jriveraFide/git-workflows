@@ -3,10 +3,10 @@ La estructura de folders dentro de tu repositorio debe de ser la siguiente:
 - miRepositorio
   - .github/workflows/miworkflow.yml
   - examen1
-     - nombre_del_estudiante.py
+     - nombre_del_estudiante.zip
      - criterios.json
   - tarea1
-     - nombre_del_estudiante.py
+     - nombre_del_estudiante.zip
      - criterios.json
        
 Debes de crear los siguientes secretos en tu repositorio:
