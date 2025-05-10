@@ -2,10 +2,10 @@ Este es un codigo reusable en los action workflow ubicados en los repositorios d
 La estructura de folders dentro de tu repositorio debe de ser la siguiente:
 - miRepositorio
   - .github/workflows/miworkflow.yml
-  - examen1
+  - <nombre_del_curso>_<nombre_de_evaluacion>
      - nombre_del_estudiante.zip
      - criterios.json
-  - tarea1
+  - <nombre_del_curso>_<nombre_de_evaluacion>
      - nombre_del_estudiante.zip
      - criterios.json
        
