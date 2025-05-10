@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       carpeta:
-        description: 'Nombre de la carpeta del examen (ej. examen1)'
+        description: 'Nombre de la carpeta del examen'
         required: true
         type: string
       repo_estudiantes:
@@ -18,8 +18,6 @@ jobs:
 
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      GITHUB_TOKEN : ${{ secrets.GITHUB_TOKEN }}
-      REPO_REPORTES : ${{ secrets.REPO_REPORTES }}
 
     steps:
       - name: Clonar el repositorio evaluador
@@ -39,8 +37,8 @@ jobs:
       - name: Clonar el repositorio de los reportes
         uses: actions/checkout@v3
         with:
-          repository: jriveraFide/Reportes
-          token: ${{ secrets.PAT_REPORTES }}  # ← Usamos el token personal
+          repository: ${{ secrets.REPO_REPORTES }}
+          token: ${{ secrets.PAT_REPORTES }} 
           ref: main
           path: reportes
 
@@ -84,5 +82,5 @@ jobs:
 
           git add .
           git commit -m "Reportes generados para $carpeta" || echo "Sin cambios para commitear"
-          git remote set-url origin https://${{ secrets.PAT_REPORTES }}@github.com/jriveraFide/Reportes.git
+          git remote set-url origin https://${{ secrets.PAT_REPORTES }}@github.com/${{ secrets.REPO_REPORTES }}.git
           git push
