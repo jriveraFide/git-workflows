@@ -1,0 +1,53 @@
+name: Reusable - Evaluar Examen
+
+on:
+  workflow_call:
+    inputs:
+      carpeta:
+        required: true
+        type: string
+
+jobs:
+  evaluar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código del repositorio del estudiante
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Instalar dependencias
+        run: pip install openai
+
+      - name: Ejecutar evaluación
+        run: |
+          carpeta="${{ inputs.carpeta }}"
+          echo "Evaluando carpeta: $carpeta"
+          if [ -f "$carpeta/criterios.json" ]; then
+            for archivo in "$carpeta"/*.txt; do
+              estudiante=$(basename "$archivo" .txt)
+              python3 path/al/script/generar_feedback.py \
+                --codigo "$archivo" \
+                --criterios "$carpeta/criterios.json" \
+                --salida "$carpeta/${estudiante}.md"
+            done
+          else
+            echo "No se encontró criterios.json en $carpeta"
+            exit 1
+          fi
+
+      - name: Subir reportes al repositorio de reportes
+        run: |
+          git clone https://<token>@github.com/<usuario>/repositorio-reportes.git
+          mkdir -p repositorio-reportes/$carpeta
+          cp $carpeta/*.md repositorio-reportes/$carpeta/
+          cd repositorio-reportes
+          git config user.name "Evaluador Automático"
+          git config user.email "eval@auto.com"
+          git add .
+          git commit -m "Reportes para $carpeta"
+          git push
