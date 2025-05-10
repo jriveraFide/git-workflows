@@ -1,18 +1,22 @@
-name: Reusable - Evaluar Examen
+name: Evaluar Examen Específico - Reusable
 
 on:
-  workflow_call:
+  workflow_dispatch:
     inputs:
       carpeta:
+        description: 'Nombre de la carpeta del examen a evaluar (ej. examen1)'
         required: true
         type: string
 
 jobs:
-  evaluar:
+  evaluar_examen:
     runs-on: ubuntu-latest
 
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
     steps:
-      - name: Checkout código del repositorio del estudiante
+      - name: Checkout del repositorio
         uses: actions/checkout@v3
 
       - name: Configurar Python
@@ -23,20 +27,21 @@ jobs:
       - name: Instalar dependencias
         run: pip install openai
 
-      - name: Ejecutar evaluación
+      - name: Evaluar estudiantes en carpeta seleccionada
         run: |
-          carpeta="${{ inputs.carpeta }}"
-          echo "Evaluando carpeta: $carpeta"
+          carpeta="${{ github.event.inputs.carpeta || 'examen1' }}"  # Valor por defecto para cron
+          echo "📁 Evaluando carpeta: $carpeta"
+
           if [ -f "$carpeta/criterios.json" ]; then
             for archivo in "$carpeta"/*.txt; do
-              estudiante=$(basename "$archivo" .txt)
-              python3 path/al/script/generar_feedback.py \
+              estudiante=$(basename "$archivo" .java)
+              python3 scripts/generar_feedback.py \
                 --codigo "$archivo" \
                 --criterios "$carpeta/criterios.json" \
                 --salida "$carpeta/${estudiante}.md"
             done
           else
-            echo "No se encontró criterios.json en $carpeta"
+            echo "❌ No se encontró criterios.json en $carpeta"
             exit 1
           fi
 
