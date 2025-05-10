@@ -20,7 +20,7 @@ REPO_EVALUADOR --> este es la direccion en github donde se encuentra este reposi
 REPO_REPORTES --> este es la direccion en github donde se encuentra el repositorio donde quieres que la automatizacion cargue tus reportes formato: org/repo (PRIVADO)
 
 Estructura para el archivo criterios.json:
-
+```
 {
   "criterios": [
     {
@@ -45,3 +45,4 @@ Estructura para el archivo criterios.json:
     }
   ]
 }
+```
