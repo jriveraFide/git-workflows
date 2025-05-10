@@ -46,7 +46,6 @@ jobs:
           ref: main
           path: reportes
 
-
       - name: Configurar Python
         uses: actions/setup-python@v4
         with:
@@ -62,14 +61,19 @@ jobs:
           echo "📂 Evaluando carpeta: $carpeta"
 
           if [ -f "estudiantes/$carpeta/criterios.json" ]; then
-            for archivo in "estudiantes/$carpeta"/*.java; do
-              estudiante=$(basename "$archivo" .java)
-              echo "🧪 Evaluando: $archivo"
+            # Descomprimir todos los archivos .zip en la carpeta
+            for archivo_zip in "estudiantes/$carpeta"/*.zip; do
+              echo "📦 Descomprimiendo: $archivo_zip"
+              carpeta_extraida="estudiantes/$carpeta/$(basename "$archivo_zip" .zip)"
+              mkdir -p "$carpeta_extraida"
+              unzip "$archivo_zip" -d "$carpeta_extraida"
+
+              # Leer el código desde la carpeta extraída
               python3 evaluador/scripts/generar_feedback.py \
-                --codigo "$archivo" \
+                --carpeta "$carpeta_extraida" \
                 --criterios "estudiantes/$carpeta/criterios.json" \
                 --prompt_principal "evaluador/scripts/prompts/$prompt" \
-                --salida "estudiantes/$carpeta/${estudiante}.md"
+                --salida "reportes/$carpeta/$(basename "$archivo_zip" .zip).md"
             done
           else
             echo "❌ No se encontró criterios.json en $carpeta"
@@ -80,7 +84,7 @@ jobs:
         run: |
           carpeta="${{ github.event.inputs.carpeta }}"
           mkdir -p reportes/$carpeta
-          cp estudiantes/$carpeta/*.md reportes/$carpeta/
+          cp reportes/$carpeta/*.md reportes/$carpeta/
 
           cd reportes
           git config user.name "github-actions[bot]"
