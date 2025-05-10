@@ -2,10 +2,10 @@ import argparse
 import json
 import os
 from datetime import datetime
-import openai
+from openai import OpenAI
 
-# Crear cliente con la nueva interfaz
-client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# Inicializar cliente con la API Key desde variable de entorno
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def cargar_codigo(ruta_archivo):
     with open(ruta_archivo, 'r', encoding='utf-8') as f:
@@ -28,7 +28,7 @@ def construir_prompt(codigo, criterios):
 
 def evaluar_con_openai(prompt):
     response = client.chat.completions.create(
-        model="gpt-4",
+        model="gpt-4o",
         messages=[
             {"role": "system", "content": "Eres un evaluador académico de código Java."},
             {"role": "user", "content": prompt}
