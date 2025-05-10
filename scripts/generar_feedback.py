@@ -21,7 +21,7 @@ def cargar_criterios(ruta_json):
     return data['criterios']
 
 def construir_prompt(codigo, criterios, prompt_princpal):
-    prompt = prompt_principal
+    prompt = prompt_princpal
     prompt += "\n\n### Código del Estudiante:\n"
     prompt += f"```\n{codigo}\n```\n\n"
     prompt += "### Criterios de Evaluación:\n"
