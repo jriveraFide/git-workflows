@@ -11,7 +11,7 @@ def cargar_codigo(ruta_archivo):
     with open(ruta_archivo, 'r', encoding='utf-8') as f:
         return f.read()
         
-def cargar_promt_princpal(ruta_archivo):
+def cargar_prompt_princpal(ruta_archivo):
     with open(ruta_archivo, 'r', encoding='utf-8') as f:
         return f.read()
 
@@ -20,8 +20,8 @@ def cargar_criterios(ruta_json):
         data = json.load(f)
     return data['criterios']
 
-def construir_prompt(codigo, criterios, promt_princpal):
-    prompt = promt_principal
+def construir_prompt(codigo, criterios, prompt_princpal):
+    prompt = prompt_principal
     prompt += "### Código del Estudiante:\n"
     prompt += f"```\n{codigo}\n```\n\n"
     prompt += "### Criterios de Evaluación:\n"
@@ -52,14 +52,14 @@ def main():
     parser = argparse.ArgumentParser(description='Generar feedback con IA.')
     parser.add_argument('--codigo', required=True, help='Ruta al archivo de código .java')
     parser.add_argument('--criterios', required=True, help='Ruta al archivo criterios.json')
-    parser.add_argument('--promt_principal', required=True, help='Prompt a utilizar')
+    parser.add_argument('--prompt_principal', required=True, help='Prompt a utilizar')
     parser.add_argument('--salida', required=True, help='Ruta de salida del reporte Markdown')
 
     args = parser.parse_args()
 
     codigo = cargar_codigo(args.codigo)
     criterios = cargar_criterios(args.criterios)
-    promt_princpal = cargar_promt_princpal(args.promt_principal)
+    prompt_princpal = cargar_prompt_princpal(args.prompt_principal)
     prompt = construir_prompt(codigo, criterios, promt_princpal)
     feedback = evaluar_con_openai(prompt)
     guardar_feedback(args.salida, feedback)
