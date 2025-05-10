@@ -8,7 +8,11 @@ on:
         required: true
         type: string
       repo_estudiantes:
-        description: 'Nombre del repositorio de los estudiantes (ej. repositorio-de-estudiantes)'
+        description: 'Nombre del repositorio de los estudiantes'
+        required: true
+        type: string
+      repo_reportes:
+        description: 'Nombre del repositorio de los reportes'
         required: true
         type: string
 
@@ -33,6 +37,13 @@ jobs:
 
       # Clonar el repositorio de los estudiantes en una carpeta llamada estudiantes
       - name: Clonar el repositorio de los estudiantes
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.event.inputs.repo_reportes }}  # Usar el nombre del repositorio de estudiantes como input
+          token: ${{ secrets.GITHUB_TOKEN }}  # Autenticación con el token de GitHub
+          path: reportes  # Carpeta donde se clonará el repositorio de estudiantes
+      # Clonar el repositorio de reportes en una carpeta llamada reportes
+      - name: Clonar el repositorio de los reportes
         uses: actions/checkout@v3
         with:
           repository: ${{ github.event.inputs.repo_estudiantes }}  # Usar el nombre del repositorio de estudiantes como input
@@ -87,10 +98,9 @@ jobs:
       # Subir los reportes generados al repositorio de reportes
       - name: Subir reportes al repositorio de reportes
         run: |
-          git clone https://${{ secrets.GITHUB_TOKEN }}@github.com/jriveraFide/Reportes.git
-          mkdir -p Reportes/${{ github.event.inputs.carpeta }}
+          mkdir -p reportes/${{ github.event.inputs.carpeta }}
           cp estudiantes/$carpeta/*.md Reportes/${{ github.event.inputs.carpeta }}/
-          cd Reportes
+          cd reportes
           git add .
           git commit -m "Reportes generados para ${{ github.event.inputs.carpeta }}"
           git push
