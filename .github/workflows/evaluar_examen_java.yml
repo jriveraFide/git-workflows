@@ -87,7 +87,7 @@ jobs:
       # Subir los reportes generados al repositorio de reportes
       - name: Subir reportes al repositorio de reportes
         run: |
-          git clone $REPO_REPORTES
+          git clone https://github.com/jriveraFide/Reportes
           mkdir -p Reportes/${{ github.event.inputs.carpeta }}
           cp estudiantes/$carpeta/*.md Reportes/${{ github.event.inputs.carpeta }}/
           cd Reportes
