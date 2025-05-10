@@ -22,7 +22,7 @@ def cargar_criterios(ruta_json):
 
 def construir_prompt(codigo, criterios, prompt_princpal):
     prompt = prompt_principal
-    prompt += "### Código del Estudiante:\n"
+    prompt += "\n\n### Código del Estudiante:\n"
     prompt += f"```\n{codigo}\n```\n\n"
     prompt += "### Criterios de Evaluación:\n"
     for i, criterio in enumerate(criterios, 1):
