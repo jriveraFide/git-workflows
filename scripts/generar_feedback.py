@@ -60,7 +60,7 @@ def main():
     codigo = cargar_codigo(args.codigo)
     criterios = cargar_criterios(args.criterios)
     prompt_princpal = cargar_prompt_princpal(args.prompt_principal)
-    prompt = construir_prompt(codigo, criterios, promt_princpal)
+    prompt = construir_prompt(codigo, criterios, prompt_princpal)
     feedback = evaluar_con_openai(prompt)
     guardar_feedback(args.salida, feedback)
 
