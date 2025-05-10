@@ -39,7 +39,7 @@ jobs:
 
       - name: Setup .netrc
         run: |
-          cp .netrc ~
+          cp .netrc ~/.netrc
           chmod +600 ~/.netrc
           sed -i "s/GHE/$GITHUB_TOKEN/g"  ~/.netrc
         shell: bash
