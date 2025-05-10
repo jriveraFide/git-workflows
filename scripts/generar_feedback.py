@@ -68,7 +68,15 @@ def evaluar_con_openai(prompt):
     return response.choices[0].message.content.strip()
 
 def guardar_feedback(ruta_salida, contenido):
-    """Guarda el feedback en un archivo de salida"""
+    """Guarda el feedback en un archivo de salida, creando la carpeta si no existe."""
+    # Obtener el directorio de la ruta de salida
+    directorio = os.path.dirname(ruta_salida)
+    
+    # Crear el directorio si no existe
+    if not os.path.exists(directorio):
+        os.makedirs(directorio)
+
+    # Guardar el archivo con el contenido
     with open(ruta_salida, 'w', encoding='utf-8') as f:
         f.write(f"# Reporte de Evaluación\n\n")
         f.write(f"Generado automáticamente el {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
