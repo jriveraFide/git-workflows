@@ -22,9 +22,13 @@ jobs:
       REPO_REPORTES : ${{ secrets.REPO_REPORTES }}
 
     steps:
+      # Checkout del repositorio evaluador (donde está el script generar_feedback.py)
       - name: Checkout del repositorio evaluador
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}  # Esto asegura que estemos trabajando con el repositorio actual
 
+      # Clonar el repositorio de los estudiantes en una carpeta llamada estudiantes
       - name: Clonar el repositorio de los estudiantes
         uses: actions/checkout@v3
         with:
@@ -32,49 +36,57 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}  # Autenticación con el token de GitHub
           path: estudiantes  # Carpeta donde se clonará el repositorio de estudiantes
 
+      # Confirmación de los archivos y directorios que tenemos
+      - name: Listar el contenido de los directorios
+        run: |
+          echo "Contenido del repositorio evaluador:"
+          ls -la
+          echo "Contenido del repositorio de estudiantes:"
+          ls -la estudiantes/
+
+      # Configuración de Python
       - name: Configurar Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
+      # Crear y configurar .netrc para autenticación
       - name: Setup .netrc
         run: |
-          echo "machine github.com login $GITHUB_TOKEN password x-oauth-basic" > ~/.netrc
+          echo "machine github.com login $GITHUB_ACTOR password $GITHUB_TOKEN" > ~/.netrc
           chmod 600 ~/.netrc
         shell: bash
 
+      # Instalar dependencias
       - name: Instalar dependencias
         run: pip install openai
 
-      - name: Listar directorios (para depuración)
-        run: |
-          echo "/"
-          ls 
-
+      # Evaluar los archivos en la carpeta indicada
       - name: Evaluar todos los archivos en la carpeta indicada
         run: |
           carpeta="${{ github.event.inputs.carpeta }}"
           echo "📂 Evaluando carpeta: $carpeta"
 
-          if [ -f "estudiantes/$carpeta/criterios.json" ]; then  # Cambiado para que apunte al directorio clonado
-            for archivo in "estudiantes/$carpeta"/*.java; do  # Cambiado para que apunte al directorio clonado
+          if [ -f "estudiantes/$carpeta/criterios.json" ]; then
+            for archivo in "estudiantes/$carpeta"/*.java; do
               estudiante=$(basename "$archivo" .java)
               echo "🧪 Evaluando: $archivo"
               python3 scripts/generar_feedback.py \
                 --codigo "$archivo" \
-                --criterios "estudiantes/$carpeta/criterios.json" \  # Cambiado para que apunte al directorio clonado
-                --salida "estudiantes/$carpeta/${estudiante}.md"  # Cambiado para que apunte al directorio clonado
+                --criterios "estudiantes/$carpeta/criterios.json" \
+                --salida "estudiantes/$carpeta/${estudiante}.md"
             done
           else
             echo "❌ No se encontró criterios.json en $carpeta"
             exit 1
           fi
 
+      # Subir los reportes generados al repositorio de reportes
       - name: Subir reportes al repositorio de reportes
         run: |
           git clone $REPO_REPORTES
           mkdir -p Reportes/${{ github.event.inputs.carpeta }}
-          cp estudiantes/$carpeta/*.md Reportes/${{ github.event.inputs.carpeta }}/  # Cambiado para que apunte al directorio clonado
+          cp estudiantes/$carpeta/*.md Reportes/${{ github.event.inputs.carpeta }}/
           cd Reportes
           git add .
           git commit -m "Reportes generados para ${{ github.event.inputs.carpeta }}"
