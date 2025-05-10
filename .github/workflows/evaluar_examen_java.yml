@@ -14,7 +14,8 @@ jobs:
 
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      GITHUB_TOKEN : $${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN : ${{ secrets.GITHUB_TOKEN }}
+      REPO_REPORTES : ${{ secrets.REPO_REPORTES }}
 
     steps:
       - name: Checkout del repositorio
@@ -56,12 +57,10 @@ jobs:
 
       - name: Subir reportes al repositorio de reportes
         run: |
-          git clone https://<token>@github.com/<usuario>/repositorio-reportes.git
+          git clone $REPO_REPORTES
           mkdir -p repositorio-reportes/${{ github.event.inputs.carpeta }}
           cp ${{ github.event.inputs.carpeta }}/*.md repositorio-reportes/${{ github.event.inputs.carpeta }}/
           cd repositorio-reportes
-          git config user.name "Evaluador Automático"
-          git config user.email "eval@auto.com"
           git add .
           git commit -m "Reportes generados para ${{ github.event.inputs.carpeta }}"
           git push
