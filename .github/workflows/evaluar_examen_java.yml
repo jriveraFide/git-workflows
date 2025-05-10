@@ -65,7 +65,6 @@ jobs:
                 --carpeta "estudiantes/$carpeta" \
                 --criterios "estudiantes/$carpeta/criterios.json" \
                 --prompt_principal "evaluador/scripts/prompts/$prompt" \
-                --salida "reportes/$carpeta/$(basename "$archivo_zip" .zip).md"
           else
             echo "❌ No se encontró criterios.json en $carpeta"
             exit 1
