@@ -61,13 +61,8 @@ jobs:
           echo "📂 Evaluando carpeta: $carpeta"
 
           if [ -f "estudiantes/$carpeta/criterios.json" ]; then
-            # Recorrer todos los archivos .zip en la carpeta
-            for archivo_zip in "estudiantes/$carpeta"/*.zip; do
-              echo "📦 Procesando archivo: $archivo_zip"
-              
-              # Pasar el archivo .zip al script de Python para procesarlo
               python3 evaluador/scripts/generar_feedback.py \
-                --archivo_zip "$archivo_zip" \
+                --carpeta "$carpeta" \
                 --criterios "estudiantes/$carpeta/criterios.json" \
                 --prompt_principal "evaluador/scripts/prompts/$prompt" \
                 --salida "reportes/$carpeta/$(basename "$archivo_zip" .zip).md"
