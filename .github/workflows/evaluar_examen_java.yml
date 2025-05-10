@@ -80,7 +80,7 @@ jobs:
           echo "✅ Carpeta de reportes creada: $carpeta_reportes"
 
           # Copiar los archivos .md a la carpeta del repositorio de reportes
-          cp $carpeta_reportes/*.md reportes/$carpeta
+          cp estudiantes/$carpeta/reportes/*.md reportes/$carpeta
 
           cd reportes
           git config user.name "github-actions[bot]"
