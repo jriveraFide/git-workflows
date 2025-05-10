@@ -26,7 +26,7 @@ jobs:
       - name: Checkout del repositorio evaluador
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.ref }}  # Esto asegura que estemos trabajando con el repositorio actual
+          ref: main  # Esto asegura que estemos trabajando con el repositorio actual
 
       # Clonar el repositorio de los estudiantes en una carpeta llamada estudiantes
       - name: Clonar el repositorio de los estudiantes
