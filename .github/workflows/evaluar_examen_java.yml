@@ -20,34 +20,30 @@ jobs:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       GITHUB_TOKEN : ${{ secrets.GITHUB_TOKEN }}
       REPO_REPORTES : ${{ secrets.REPO_REPORTES }}
-      
 
     steps:
-      # Clonar el repositorio de los estudiantes en una carpeta llamada estudiantes
-      - name: Clonar el repositorio actual
+      - name: Clonar el repositorio evaluador
         uses: actions/checkout@v3
         with:
           repository: jriveraFide/git-workflows
-          token: ${{ secrets.GITHUB_TOKEN }}  
-          path: evaluador  
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: evaluador
 
-      # Clonar el repositorio de los estudiantes en una carpeta llamada estudiantes
       - name: Clonar el repositorio de los estudiantes
         uses: actions/checkout@v3
         with:
-          repository: ${{ github.event.inputs.repo_estudiantes }} 
-          token: ${{ secrets.GITHUB_TOKEN }}  
-          path: estudiantes  
-          
+          repository: ${{ github.event.inputs.repo_estudiantes }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: estudiantes
+
       - name: Clonar el repositorio de los reportes
         uses: actions/checkout@v3
         with:
           repository: jriveraFide/Reportes
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_REPORTES }}  # ← Usamos el token personal
           ref: main
           path: reportes
 
-      # Confirmación de los archivos y directorios que tenemos
       - name: Listar el contenido de los directorios
         run: |
           echo "Contenido del repositorio evaluador:"
@@ -57,24 +53,14 @@ jobs:
           echo "Contenido del repositorio de reportes:"
           ls -la reportes/
 
-      # Configuración de Python
       - name: Configurar Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
-      # Crear y configurar .netrc para autenticación
-      - name: Setup .netrc
-        run: |
-          echo "machine github.com login $GITHUB_ACTOR password $GITHUB_TOKEN" > ~/.netrc
-          chmod 600 ~/.netrc
-        shell: bash
-
-      # Instalar dependencias
       - name: Instalar dependencias
         run: pip install openai
 
-      # Evaluar los archivos en la carpeta indicada
       - name: Evaluar todos los archivos en la carpeta indicada
         run: |
           carpeta="${{ github.event.inputs.carpeta }}"
@@ -94,18 +80,17 @@ jobs:
             exit 1
           fi
 
-      # Subir los reportes generados al repositorio de reportes
       - name: Subir reportes al repositorio de reportes
         run: |
-          mkdir -p reportes/${{ github.event.inputs.carpeta }}
-          cp estudiantes/${{ github.event.inputs.carpeta }}/*.md reportes/${{ github.event.inputs.carpeta }}/
-      
-          cd reportes
-      
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-      
-          git add .
-          git commit -m "Reportes generados para ${{ github.event.inputs.carpeta }}"
-          git push
+          carpeta="${{ github.event.inputs.carpeta }}"
+          mkdir -p reportes/$carpeta
+          cp estudiantes/$carpeta/*.md reportes/$carpeta/
 
+          cd reportes
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add .
+          git commit -m "Reportes generados para $carpeta" || echo "Sin cambios para commitear"
+          git remote set-url origin https://${{ secrets.PAT_REPORTES }}@github.com/jriveraFide/Reportes.git
+          git push
