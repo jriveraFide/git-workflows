@@ -98,7 +98,7 @@ jobs:
       - name: Subir reportes al repositorio de reportes
         run: |
           mkdir -p reportes/${{ github.event.inputs.carpeta }}
-          cp estudiantes/${{ github.event.inputs.carpeta }}/*.md Reportes/${{ github.event.inputs.carpeta }}/
+          cp estudiantes/${{ github.event.inputs.carpeta }}/*.md reportes/${{ github.event.inputs.carpeta }}/
           cd reportes
           git add .
           git commit -m "Reportes generados para ${{ github.event.inputs.carpeta }}"
