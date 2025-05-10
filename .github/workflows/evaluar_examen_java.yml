@@ -58,6 +58,7 @@ jobs:
       - name: Evaluar todos los archivos en la carpeta indicada
         run: |
           carpeta="${{ github.event.inputs.carpeta }}"
+          prompt="${{ github.event.inputs.prompt }}"
           echo "📂 Evaluando carpeta: $carpeta"
 
           if [ -f "estudiantes/$carpeta/criterios.json" ]; then
@@ -67,7 +68,7 @@ jobs:
               python3 evaluador/scripts/generar_feedback.py \
                 --codigo "$archivo" \
                 --criterios "estudiantes/$carpeta/criterios.json" \
-                --promt_principal "./prompts/${{ github.event.inputs.prompt }}.txt" \
+                --promt_principal "./prompts/$prompt" \
                 --salida "estudiantes/$carpeta/${estudiante}.md"
             done
           else
