@@ -68,7 +68,7 @@ jobs:
               python3 evaluador/scripts/generar_feedback.py \
                 --codigo "$archivo" \
                 --criterios "estudiantes/$carpeta/criterios.json" \
-                --promt_principal "./prompts/$prompt" \
+                --prompt_principal "./prompts/$prompt" \
                 --salida "estudiantes/$carpeta/${estudiante}.md"
             done
           else
