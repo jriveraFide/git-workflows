@@ -10,7 +10,11 @@ La estructura de folders dentro de tu repositorio debe de ser la siguiente:
      - criterios.json
        
 Debes de crear los siguientes secretos en tu repositorio:
+
 OPENAI_API_KEY
+
 PAT_REPORTES --> este es tu github token
+
 REPO_EVALUADOR --> este es la direccion en github donde se encuentra este repositorio, formato: org/repo, ex: jriveraFide/git-workflows (PUBLICO)
+
 REPO_REPORTES --> este es la direccion en github donde se encuentra el repositorio donde quieres que la automatizacion cargue tus reportes (PRIVADO)
