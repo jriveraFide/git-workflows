@@ -9,7 +9,7 @@ from openai import OpenAI
 # Inicializar cliente con la API Key desde variable de entorno
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-EXTENSIONES_VALIDAS = ('.java', '.html', '.css', '.js', '.py')
+EXTENSIONES_VALIDAS = ('.java','.py')
 
 def descomprimir_zip(ruta_zip):
     """Descomprime un archivo .zip a una carpeta temporal"""
