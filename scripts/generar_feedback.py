@@ -119,7 +119,7 @@ def main():
 
         # Crear un nombre único para el archivo de salida basado en el nombre del .zip
         nombre_salida = os.path.splitext(resultado['zip'])[0]  # Nombre del archivo ZIP sin la extensión
-        salida = f"reportes/{nombre_salida}.md"  # Agregar el nombre del ZIP al reporte
+        salida = f"estudiantes/reportes/{nombre_salida}.md"  # Agregar el nombre del ZIP al reporte
 
         guardar_feedback(salida, feedback)
         print(f"✅ Feedback generado para {resultado['zip']} en: {salida}")
