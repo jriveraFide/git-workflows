@@ -7,6 +7,10 @@ on:
         description: 'Nombre de la carpeta del examen (ej. examen1)'
         required: true
         type: string
+      repo_estudiantes:
+        description: 'Nombre del repositorio de los estudiantes (ej. repositorio-de-estudiantes)'
+        required: true
+        type: string
 
 jobs:
   evaluar_examen:
@@ -16,16 +20,15 @@ jobs:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       GITHUB_TOKEN : ${{ secrets.GITHUB_TOKEN }}
       REPO_REPORTES : ${{ secrets.REPO_REPORTES }}
-      REPO_ESTUDIANTES: ${{ secrets.REPO_ESTUDIANTES }}  # Asegúrate de tener esta variable con el nombre del repositorio de los estudiantes
 
     steps:
       - name: Checkout del repositorio evaluador
         uses: actions/checkout@v3
 
-      - name: Clonar el repositorio de estudiantes
+      - name: Clonar el repositorio de los estudiantes
         uses: actions/checkout@v3
         with:
-          repository: ${{ secrets.REPO_ESTUDIANTES }}  # Reemplaza con el nombre del repositorio de los estudiantes
+          repository: ${{ github.event.inputs.repo_estudiantes }}  # Usar el nombre del repositorio de estudiantes como input
           token: ${{ secrets.GITHUB_TOKEN }}  # Autenticación con el token de GitHub
           path: estudiantes  # Carpeta donde se clonará el repositorio de estudiantes
 
