@@ -11,10 +11,6 @@ on:
         description: 'Nombre del repositorio de los estudiantes'
         required: true
         type: string
-      repo_reportes:
-        description: 'Nombre del repositorio de los reportes'
-        required: true
-        type: string
 
 jobs:
   evaluar_examen:
@@ -46,7 +42,7 @@ jobs:
       - name: Clonar el repositorio de los reportes
         uses: actions/checkout@v3
         with:
-          repository: ${{ github.event.inputs.repo_estudiantes }}  # Usar el nombre del repositorio de estudiantes como input
+          repository: 'jriveraFide/Reportes' # Usar el nombre del repositorio de estudiantes como input
           token: ${{ secrets.GITHUB_TOKEN }}  # Autenticación con el token de GitHub
           path: estudiantes  # Carpeta donde se clonará el repositorio de estudiantes
 
