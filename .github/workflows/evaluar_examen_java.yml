@@ -21,7 +21,16 @@ jobs:
       GITHUB_TOKEN : ${{ secrets.GITHUB_TOKEN }}
       REPO_REPORTES : ${{ secrets.REPO_REPORTES }}
       
+
     steps:
+      # Clonar el repositorio de los estudiantes en una carpeta llamada estudiantes
+      - name: Clonar el repositorio actual
+        uses: actions/checkout@v3
+        with:
+          repository: jriveraFide/git-workflows
+          token: ${{ secrets.GITHUB_TOKEN }}  # Autenticación con el token de GitHub
+          path: evaluador  # Carpeta donde se clonará el repositorio de estudiantes
+
       # Clonar el repositorio de los estudiantes en una carpeta llamada estudiantes
       - name: Clonar el repositorio de los estudiantes
         uses: actions/checkout@v3
@@ -33,6 +42,8 @@ jobs:
       # Confirmación de los archivos y directorios que tenemos
       - name: Listar el contenido de los directorios
         run: |
+          echo "Contenido del repositorio evaluador:"
+          ls -la
           echo "Contenido del repositorio de estudiantes:"
           ls -la estudiantes/
 
@@ -45,7 +56,7 @@ jobs:
       # Crear y configurar .netrc para autenticación
       - name: Setup .netrc
         run: |
-          echo "machine github.com login $GITHUB_ACTOR password ${{ secrets.GITHUB_TOKEN }}" > ~/.netrc
+          echo "machine github.com login $GITHUB_ACTOR password $GITHUB_TOKEN" > ~/.netrc
           chmod 600 ~/.netrc
         shell: bash
 
