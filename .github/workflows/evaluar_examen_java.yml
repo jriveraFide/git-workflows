@@ -46,6 +46,11 @@ jobs:
       - name: Instalar dependencias
         run: pip install openai
 
+      - name: Listar directorios (para depuración)
+        run: |
+          echo "/"
+          ls 
+
       - name: Evaluar todos los archivos en la carpeta indicada
         run: |
           carpeta="${{ github.event.inputs.carpeta }}"
