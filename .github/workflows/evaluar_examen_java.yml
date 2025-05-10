@@ -64,7 +64,7 @@ jobs:
               python3 evaluador/scripts/generar_feedback.py \
                 --carpeta "estudiantes/$carpeta" \
                 --criterios "estudiantes/$carpeta/criterios.json" \
-                --prompt_principal "evaluador/scripts/prompts/$prompt" \
+                --prompt_principal "evaluador/scripts/prompts/$prompt"
           else
             echo "❌ No se encontró criterios.json en $carpeta"
             exit 1
