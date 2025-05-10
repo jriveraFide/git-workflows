@@ -1,7 +1,7 @@
 name: Evaluar Examen Manual
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       carpeta:
         description: 'Nombre de la carpeta del examen (ej. examen1)'
