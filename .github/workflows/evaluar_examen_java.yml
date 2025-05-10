@@ -99,7 +99,13 @@ jobs:
         run: |
           mkdir -p reportes/${{ github.event.inputs.carpeta }}
           cp estudiantes/${{ github.event.inputs.carpeta }}/*.md reportes/${{ github.event.inputs.carpeta }}/
+      
           cd reportes
+      
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+      
           git add .
           git commit -m "Reportes generados para ${{ github.event.inputs.carpeta }}"
           git push
+
