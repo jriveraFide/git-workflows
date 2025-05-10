@@ -1,11 +1,11 @@
 import argparse
 import json
 import os
-import openai
 from datetime import datetime
+import openai
 
-# API Key desde variable de entorno
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# Crear cliente con la nueva interfaz
+client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def cargar_codigo(ruta_archivo):
     with open(ruta_archivo, 'r', encoding='utf-8') as f:
@@ -27,7 +27,7 @@ def construir_prompt(codigo, criterios):
     return prompt
 
 def evaluar_con_openai(prompt):
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         model="gpt-4",
         messages=[
             {"role": "system", "content": "Eres un evaluador académico de código Java."},
@@ -46,7 +46,7 @@ def guardar_feedback(ruta_salida, contenido):
 
 def main():
     parser = argparse.ArgumentParser(description='Generar feedback con IA.')
-    parser.add_argument('--codigo', required=True, help='Ruta al archivo de código .txt')
+    parser.add_argument('--codigo', required=True, help='Ruta al archivo de código .java')
     parser.add_argument('--criterios', required=True, help='Ruta al archivo criterios.json')
     parser.add_argument('--salida', required=True, help='Ruta de salida del reporte Markdown')
 
