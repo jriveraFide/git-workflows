@@ -1,10 +1,10 @@
-name: Evaluar Examen Específico - Reusable
+name: Evaluar Examen Manual
 
 on:
   workflow_dispatch:
     inputs:
       carpeta:
-        description: 'Nombre de la carpeta del examen a evaluar (ej. examen1)'
+        description: 'Nombre de la carpeta del examen (ej. examen1)'
         required: true
         type: string
 
@@ -27,14 +27,15 @@ jobs:
       - name: Instalar dependencias
         run: pip install openai
 
-      - name: Evaluar estudiantes en carpeta seleccionada
+      - name: Evaluar todos los archivos en la carpeta indicada
         run: |
-          carpeta="${{ github.event.inputs.carpeta || 'examen1' }}"  # Valor por defecto para cron
-          echo "📁 Evaluando carpeta: $carpeta"
+          carpeta="${{ github.event.inputs.carpeta }}"
+          echo "📂 Evaluando carpeta: $carpeta"
 
           if [ -f "$carpeta/criterios.json" ]; then
             for archivo in "$carpeta"/*.txt; do
-              estudiante=$(basename "$archivo" .java)
+              estudiante=$(basename "$archivo" .txt)
+              echo "🧪 Evaluando: $archivo"
               python3 scripts/generar_feedback.py \
                 --codigo "$archivo" \
                 --criterios "$carpeta/criterios.json" \
@@ -48,11 +49,11 @@ jobs:
       - name: Subir reportes al repositorio de reportes
         run: |
           git clone https://<token>@github.com/<usuario>/repositorio-reportes.git
-          mkdir -p repositorio-reportes/$carpeta
-          cp $carpeta/*.md repositorio-reportes/$carpeta/
+          mkdir -p repositorio-reportes/${{ github.event.inputs.carpeta }}
+          cp ${{ github.event.inputs.carpeta }}/*.md repositorio-reportes/${{ github.event.inputs.carpeta }}/
           cd repositorio-reportes
           git config user.name "Evaluador Automático"
           git config user.email "eval@auto.com"
           git add .
-          git commit -m "Reportes para $carpeta"
+          git commit -m "Reportes generados para ${{ github.event.inputs.carpeta }}"
           git push
