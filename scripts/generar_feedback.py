@@ -10,14 +10,18 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 def cargar_codigo(ruta_archivo):
     with open(ruta_archivo, 'r', encoding='utf-8') as f:
         return f.read()
+        
+def cargar_promt_princpal(ruta_archivo):
+    with open(ruta_archivo, 'r', encoding='utf-8') as f:
+        return f.read()
 
 def cargar_criterios(ruta_json):
     with open(ruta_json, 'r', encoding='utf-8') as f:
         data = json.load(f)
     return data['criterios']
 
-def construir_prompt(codigo, criterios):
-    prompt = "Eres un asistente experto en revisión de código Java. Evalúa el siguiente código de estudiante usando los criterios proporcionados. Sé justo y proporciona retroalimentación clara y específica.\n\n"
+def construir_prompt(codigo, criterios, promt_princpal):
+    prompt = promt_principal
     prompt += "### Código del Estudiante:\n"
     prompt += f"```\n{codigo}\n```\n\n"
     prompt += "### Criterios de Evaluación:\n"
@@ -54,7 +58,8 @@ def main():
 
     codigo = cargar_codigo(args.codigo)
     criterios = cargar_criterios(args.criterios)
-    prompt = construir_prompt(codigo, criterios)
+    promt_princpal = cargar_promt_princpal(args.promt_principal)
+    prompt = construir_prompt(codigo, criterios, promt_princpal)
     feedback = evaluar_con_openai(prompt)
     guardar_feedback(args.salida, feedback)
 
