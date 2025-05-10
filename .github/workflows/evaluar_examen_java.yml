@@ -58,7 +58,7 @@ jobs:
       - name: Evaluar todos los archivos en la carpeta indicada
         run: |
           carpeta="${{ github.event.inputs.carpeta }}"
-          prompt="estructura_de_datos.txt"
+          prompt="${{ github.event.inputs.prompt }}"
           echo "📂 Evaluando carpeta: $carpeta"
 
           if [ -f "estudiantes/$carpeta/criterios.json" ]; then
