@@ -16,10 +16,18 @@ jobs:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       GITHUB_TOKEN : ${{ secrets.GITHUB_TOKEN }}
       REPO_REPORTES : ${{ secrets.REPO_REPORTES }}
+      REPO_ESTUDIANTES: ${{ secrets.REPO_ESTUDIANTES }}  # Asegúrate de tener esta variable con el nombre del repositorio de los estudiantes
 
     steps:
-      - name: Checkout del repositorio
+      - name: Checkout del repositorio evaluador
         uses: actions/checkout@v3
+
+      - name: Clonar el repositorio de estudiantes
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ secrets.REPO_ESTUDIANTES }}  # Reemplaza con el nombre del repositorio de los estudiantes
+          token: ${{ secrets.GITHUB_TOKEN }}  # Autenticación con el token de GitHub
+          path: estudiantes  # Carpeta donde se clonará el repositorio de estudiantes
 
       - name: Configurar Python
         uses: actions/setup-python@v4
@@ -41,14 +49,14 @@ jobs:
           carpeta="${{ github.event.inputs.carpeta }}"
           echo "📂 Evaluando carpeta: $carpeta"
 
-          if [ -f "$carpeta/criterios.json" ]; then
-            for archivo in "$carpeta"/*.java; do
+          if [ -f "estudiantes/$carpeta/criterios.json" ]; then  # Cambiado para que apunte al directorio clonado
+            for archivo in "estudiantes/$carpeta"/*.java; do  # Cambiado para que apunte al directorio clonado
               estudiante=$(basename "$archivo" .java)
               echo "🧪 Evaluando: $archivo"
               python3 scripts/generar_feedback.py \
                 --codigo "$archivo" \
-                --criterios "$carpeta/criterios.json" \
-                --salida "$carpeta/${estudiante}.md"
+                --criterios "estudiantes/$carpeta/criterios.json" \  # Cambiado para que apunte al directorio clonado
+                --salida "estudiantes/$carpeta/${estudiante}.md"  # Cambiado para que apunte al directorio clonado
             done
           else
             echo "❌ No se encontró criterios.json en $carpeta"
@@ -59,7 +67,7 @@ jobs:
         run: |
           git clone $REPO_REPORTES
           mkdir -p Reportes/${{ github.event.inputs.carpeta }}
-          cp ${{ github.event.inputs.carpeta }}/*.md Reportes/${{ github.event.inputs.carpeta }}/
+          cp estudiantes/$carpeta/*.md Reportes/${{ github.event.inputs.carpeta }}/  # Cambiado para que apunte al directorio clonado
           cd Reportes
           git add .
           git commit -m "Reportes generados para ${{ github.event.inputs.carpeta }}"
