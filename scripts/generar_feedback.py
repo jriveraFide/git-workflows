@@ -101,7 +101,6 @@ def main():
     parser.add_argument('--carpeta', required=True, help='Ruta a la carpeta que contiene los archivos .zip de los estudiantes')
     parser.add_argument('--criterios', required=True, help='Ruta al archivo criterios.json')
     parser.add_argument('--prompt_principal', required=True, help='Prompt a utilizar')
-    parser.add_argument('--salida', required=True, help='Ruta base para el archivo de salida Markdown')
 
     args = parser.parse_args()
 
