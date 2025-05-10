@@ -8,6 +8,7 @@ La estructura de folders dentro de tu repositorio debe de ser la siguiente:
   - tarea1
      - nombre_del_estudiante.py
      - criterios.json
+       
 Debes de crear los siguientes secretos en tu repositorio:
 OPENAI_API_KEY
 PAT_REPORTES --> este es tu github token
