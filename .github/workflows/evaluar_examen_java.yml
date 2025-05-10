@@ -11,6 +11,10 @@ on:
         description: 'Nombre del repositorio de los estudiantes'
         required: true
         type: string
+      prompt:
+        description: 'Nombre del prompt a utilizar'
+        required: true
+        type: string
 
 jobs:
   evaluar_examen:
@@ -63,7 +67,7 @@ jobs:
               python3 evaluador/scripts/generar_feedback.py \
                 --codigo "$archivo" \
                 --criterios "estudiantes/$carpeta/criterios.json" \
-                --promt_principal "./prompts/${{ secrets.PROMPT }}"
+                --promt_principal "./prompts/${{ github.event.inputs.prompt }}"
                 --salida "estudiantes/$carpeta/${estudiante}.md"
             done
           else
