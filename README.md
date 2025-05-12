@@ -1,5 +1,5 @@
-Este es un codigo reusable en los action workflow ubicados en los repositorios donde tus estudiantes vana subir su codigo.
-La estructura de folders dentro de tu repositorio debe de ser la siguiente:
+Este es un codigo reusable en los action workflow ubicados en los repositorios donde los estudiantes van a subir su codigo.
+La estructura de folders dentro del repositorio debe de ser la siguiente:
 - miRepositorio
   - .github/workflows/miworkflow.yml
   - <nombre_del_curso>_<nombre_de_evaluacion>
@@ -46,3 +46,4 @@ Estructura para el archivo criterios.json:
   ]
 }
 ```
+By Jose Rivera
